@@ -33,3 +33,27 @@ else
 	echo "OK! permisiuni de scriere sigure"
 fi
 
+#verificam directivele
+#definim regulile
+#prima-persoanele anonime(fara nume utilizator,parola) nu au acces
+#a doua-persoanele anonime nu pot incarca fisiere
+#a treia-izolare-utilizatorii nu pot iesi din folderul lor sa intre prin fisierele sistemului
+reguli="anonymous_enable:NO anon_upload_enable:NO chroot_local_user:YES"
+
+for regula in $reguli; do
+	#separam regula in nume directiva si valoarea buna
+	directiva=$(echo $regula | cut -d: -f1)
+	val_ok=$(echo $regula| cut -d: -f2) 
+	#incepem sa cautam liniile in fisier care incep cu numele directivei, nu luam si comentariile posibile
+	linii=$(grep "^$directiva=" "$file")
+	#verificam daca e setata sau nu
+	if [ -z "$linii" ]; then
+		echo " $directiva nu este setata"
+	else
+		#incepem sa numaram liniile care covin pt a stii daca exista sau nu duplicate
+		nr_linii=$(echo "$linii" | grep -c "^")
+		if [ "$nr_linii" -gt 1 ]; then
+			echo "Duplicat! $directiva apare de $nr_linii ori"
+			echo "liniile respective sunt:"
+			echo "$linii"
+		fi

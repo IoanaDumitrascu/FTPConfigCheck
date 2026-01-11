@@ -71,3 +71,4 @@ for regula in $reguli; do
 done
 #am terminat raportul
 echo "raport finalizat"
+ 

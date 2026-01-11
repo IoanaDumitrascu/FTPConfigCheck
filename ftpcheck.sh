@@ -57,3 +57,17 @@ for regula in $reguli; do
 			echo "liniile respective sunt:"
 			echo "$linii"
 		fi
+		#ignoram valorile gasite mai sus si o luam doar pe ultima pt ca doar aceea ramane valabila
+		ul_linie=$(echo "$linii" | tail -n 1)
+		val_gasita=$(echo "$ul_linie" | cut -d= -f2)
+		#verificam daca valoarea activa e buna sau nu
+		if [ "$val_gasita" != "$val_ok" ]; then
+			echo "Atentie! $directiva este $val_gasita, nu $val_ok"
+			echo "Linie activa: $ul_linie"
+		else
+			echo "OK! $directiva este $val_ok, setat ok"
+		fi
+	fi
+done
+#am terminat raportul
+echo "raport finalizat"
